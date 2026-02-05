@@ -69,6 +69,10 @@ export default function Home() {
         </nav>
 
         <section className="hero">
+          <div className="hero-bg" aria-hidden="true">
+            <img className="hero-bull" src="/bull.svg" alt="" />
+            <img className="hero-bear" src="/bear.svg" alt="" />
+          </div>
           <div>
             <div className="badge">Bitcoin Bear & Bull Run</div>
             <div className="hero-subtitle">Cycle intelligence for bold traders</div>

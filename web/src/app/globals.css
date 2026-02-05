@@ -190,6 +190,8 @@ a {
   gap: 40px;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   align-items: start;
+  position: relative;
+  overflow: hidden;
 }
 
 .hero h1 {
@@ -219,6 +221,37 @@ a {
   flex-wrap: wrap;
   gap: 14px;
   margin-top: 24px;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-bull,
+.hero-bear {
+  position: absolute;
+  top: 50%;
+  width: min(52vw, 760px);
+  opacity: 0.28;
+  filter: blur(0.2px);
+}
+
+.hero-bull {
+  left: -6%;
+  transform: translateY(-50%);
+}
+
+.hero-bear {
+  right: -6%;
+  transform: translateY(-50%) scaleX(-1);
 }
 
 .hero-cards {
@@ -333,6 +366,22 @@ a {
 @media (max-width: 860px) {
   .stats-half {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .hero-bull,
+  .hero-bear {
+    width: min(70vw, 560px);
+    opacity: 0.22;
+  }
+
+  .hero-bull {
+    left: -12%;
+  }
+
+  .hero-bear {
+    right: -12%;
   }
 }
 
