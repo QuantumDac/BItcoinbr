@@ -20,6 +20,8 @@ const STAKING_ADDRESS =
 const TOKEN_ADDRESS =
   process.env.NEXT_PUBLIC_TOKEN_ADDRESS ||
   "0x0Cf564A2b5F05699aA9A657bA12d3076b1a8F262";
+const STAKING_ADDRESS_HEX = STAKING_ADDRESS as `0x${string}`;
+const TOKEN_ADDRESS_HEX = TOKEN_ADDRESS as `0x${string}`;
 
 type NewsItem = {
   title: string;
@@ -58,7 +60,7 @@ export default function DashboardClient() {
     error: stakeError,
     refetch: refetchStake,
   } = useReadContract({
-    address: STAKING_ADDRESS as `0x${string}`,
+    address: STAKING_ADDRESS_HEX,
     abi: stakingAbi,
     functionName: "stakes",
     args: address ? [address] : undefined,
@@ -70,7 +72,7 @@ export default function DashboardClient() {
     error: tierError,
     refetch: refetchTier,
   } = useReadContract({
-    address: STAKING_ADDRESS as `0x${string}`,
+    address: STAKING_ADDRESS_HEX,
     abi: stakingAbi,
     functionName: "getTier",
     args: address ? [address] : undefined,
@@ -82,7 +84,7 @@ export default function DashboardClient() {
     error: pendingError,
     refetch: refetchPending,
   } = useReadContract({
-    address: STAKING_ADDRESS as `0x${string}`,
+    address: STAKING_ADDRESS_HEX,
     abi: stakingAbi,
     functionName: "pendingReward",
     args: address ? [address] : undefined,
@@ -131,7 +133,7 @@ export default function DashboardClient() {
     const load = async () => {
       try {
         const data = await publicClient.readContract({
-          address: STAKING_ADDRESS as `0x${string}`,
+          address: STAKING_ADDRESS_HEX,
           abi: stakingAbi,
           functionName: "stakes",
           args: [address],
@@ -149,7 +151,7 @@ export default function DashboardClient() {
     const loadTier = async () => {
       try {
         const data = await publicClient.readContract({
-          address: STAKING_ADDRESS as `0x${string}`,
+          address: STAKING_ADDRESS_HEX,
           abi: stakingAbi,
           functionName: "getTier",
           args: [address],
@@ -169,7 +171,7 @@ export default function DashboardClient() {
     error: balanceError,
     refetch: refetchBalance,
   } = useReadContract({
-    address: TOKEN_ADDRESS as `0x${string}`,
+    address: TOKEN_ADDRESS_HEX,
     abi: tokenAbi,
     functionName: "balanceOf",
     args: address ? [address] : undefined,
@@ -185,10 +187,10 @@ export default function DashboardClient() {
     if (!amount) return;
     const wei = parseUnits(amount, 18);
     const hash = await writeContractAsync({
-      address: TOKEN_ADDRESS as `0x${string}`,
+      address: TOKEN_ADDRESS_HEX,
       abi: tokenAbi,
       functionName: "approve",
-      args: [STAKING_ADDRESS, wei],
+      args: [STAKING_ADDRESS_HEX, wei],
     });
     setLastTx(hash);
   };
@@ -197,7 +199,7 @@ export default function DashboardClient() {
     if (!amount) return;
     const wei = parseUnits(amount, 18);
     const hash = await writeContractAsync({
-      address: STAKING_ADDRESS as `0x${string}`,
+      address: STAKING_ADDRESS_HEX,
       abi: stakingAbi,
       functionName: "stake",
       args: [wei],
@@ -207,7 +209,7 @@ export default function DashboardClient() {
 
   const handleClaim = async () => {
     const hash = await writeContractAsync({
-      address: STAKING_ADDRESS as `0x${string}`,
+      address: STAKING_ADDRESS_HEX,
       abi: stakingAbi,
       functionName: "claim",
       args: [],
@@ -217,7 +219,7 @@ export default function DashboardClient() {
 
   const handleUnstake = async () => {
     const hash = await writeContractAsync({
-      address: STAKING_ADDRESS as `0x${string}`,
+      address: STAKING_ADDRESS_HEX,
       abi: stakingAbi,
       functionName: "unstake",
       args: [],
