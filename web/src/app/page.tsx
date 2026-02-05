@@ -70,8 +70,8 @@ export default function Home() {
 
         <section className="hero">
           <div className="hero-bg" aria-hidden="true">
-            <img className="hero-bull" src="/bull.svg" alt="" />
-            <img className="hero-bear" src="/bear.svg" alt="" />
+            <img className="hero-bull" src="/bullish.svg" alt="" />
+            <img className="hero-bear" src="/bearish.svg" alt="" />
           </div>
           <div>
             <div className="badge">Bitcoin Bear & Bull Run</div>
