@@ -12,35 +12,50 @@ const STAKING_ADDRESS =
 const TOKEN_ADDRESS =
   process.env.NEXT_PUBLIC_TOKEN_ADDRESS ||
   "0x0Cf564A2b5F05699aA657bA12d3076b1a8F262";
+const RPCS = [
+  process.env.NEXT_PUBLIC_BSC_RPC_URL,
+  "https://bsc-dataseed.binance.org/",
+  "https://bsc-dataseed1.binance.org/",
+  "https://bsc-dataseed2.binance.org/",
+].filter(Boolean) as string[];
 
 export async function GET(request: Request) {
-  const client = createPublicClient({
-    chain: bsc,
-    transport: http(
-      process.env.NEXT_PUBLIC_BSC_RPC_URL || "https://bsc-dataseed.binance.org/"
-    ),
-  });
-
   const trendUrl = new URL("/api/trend", request.url).toString();
+  let tvl = "N/A";
+  let tier1 = "N/A";
+  let tier2 = "N/A";
 
-  const [tvlRaw, params, trend] = await Promise.all([
-    client.readContract({
-      address: TOKEN_ADDRESS as `0x${string}`,
-      abi: tokenAbi,
-      functionName: "balanceOf",
-      args: [STAKING_ADDRESS as `0x${string}`],
-    }),
-    client.readContract({
-      address: STAKING_ADDRESS as `0x${string}`,
-      abi: stakingAbi,
-      functionName: "currentParams",
-    }),
-    fetch(trendUrl).then((r) => (r.ok ? r.json() : { label: "Neutral" })),
-  ]);
+  for (const rpc of RPCS) {
+    try {
+      const client = createPublicClient({
+        chain: bsc,
+        transport: http(rpc),
+      });
+      const [tvlRaw, params] = await Promise.all([
+        client.readContract({
+          address: TOKEN_ADDRESS as `0x${string}`,
+          abi: tokenAbi,
+          functionName: "balanceOf",
+          args: [STAKING_ADDRESS as `0x${string}`],
+        }),
+        client.readContract({
+          address: STAKING_ADDRESS as `0x${string}`,
+          abi: stakingAbi,
+          functionName: "currentParams",
+        }),
+      ]);
+      tvl = formatUnits(tvlRaw as bigint, 18);
+      tier1 = formatUnits((params as readonly unknown[])[1] as bigint, 18);
+      tier2 = formatUnits((params as readonly unknown[])[2] as bigint, 18);
+      break;
+    } catch {
+      // try next rpc
+    }
+  }
 
-  const tvl = formatUnits(tvlRaw as bigint, 18);
-  const tier1 = formatUnits((params as readonly unknown[])[1] as bigint, 18);
-  const tier2 = formatUnits((params as readonly unknown[])[2] as bigint, 18);
+  const trend = await fetch(trendUrl).then((r) =>
+    r.ok ? r.json() : { label: "Neutral" }
+  );
 
   return Response.json({
     tvl,
