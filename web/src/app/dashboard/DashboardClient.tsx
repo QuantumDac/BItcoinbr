@@ -190,7 +190,7 @@ export default function DashboardClient() {
       address: TOKEN_ADDRESS_HEX,
       abi: tokenAbi,
       functionName: "approve",
-      args: [STAKING_ADDRESS_HEX, wei],
+      args: [STAKING_ADDRESS_HEX as `0x${string}`, wei],
     });
     setLastTx(hash);
   };
