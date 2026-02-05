@@ -1,5 +1,6 @@
 import ConnectStatusButton from "./components/ConnectStatusButton";
-import StatsStrip from "./components/StatsStrip";
+import { StatsLeft, StatsRight } from "./components/StatsBlocks";
+import { StatsProvider } from "./components/StatsContext";
 
 export default function Home() {
   const apySchedule = [
@@ -45,10 +46,11 @@ export default function Home() {
   ];
 
   return (
-    <div className="page" id="top">
-      <div className="glow-orb" />
-      <div className="glow-orb orb-right" />
-      <div className="container">
+    <StatsProvider>
+      <div className="page" id="top">
+        <div className="glow-orb" />
+        <div className="glow-orb orb-right" />
+        <div className="container">
         <nav className="nav">
           <div className="logo">
             <div className="logo-badge">
@@ -87,7 +89,7 @@ export default function Home() {
               <div className="tag">Token: 0x0Cf5...F262</div>
               <div className="tag">Staking: 0x9D17...7288</div>
             </div>
-            <StatsStrip />
+            <StatsLeft />
             <div className="ticker-strip">
               <div className="ticker-move">
                 {[
@@ -160,6 +162,7 @@ export default function Home() {
                 <span>Simple Interest</span>
               </div>
             </div>
+            <StatsRight />
           </div>
         </section>
 
@@ -410,7 +413,8 @@ export default function Home() {
             </a>
           </div>
         </footer>
+        </div>
       </div>
-    </div>
+    </StatsProvider>
   );
 }
