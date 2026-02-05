@@ -15,10 +15,35 @@ export default function StatsStrip() {
 
   useEffect(() => {
     const load = async () => {
-      const res = await fetch("/api/stats");
-      if (!res.ok) return;
-      const data = await res.json();
-      setStats(data);
+      try {
+        const res = await fetch("/api/stats");
+        if (res.ok) {
+          const data = await res.json();
+          setStats(data);
+          return;
+        }
+      } catch {
+        // ignore
+      }
+      try {
+        const res = await fetch("/api/trend");
+        const trend = res.ok ? await res.json() : { label: "Neutral" };
+        setStats({
+          tvl: "N/A",
+          activeStakers: "N/A",
+          tierFloor: "N/A",
+          tierFloor2: "N/A",
+          signal: trend.label || "Neutral",
+        });
+      } catch {
+        setStats({
+          tvl: "N/A",
+          activeStakers: "N/A",
+          tierFloor: "N/A",
+          tierFloor2: "N/A",
+          signal: "Neutral",
+        });
+      }
     };
     load();
     const id = setInterval(load, 5 * 60 * 1000);
