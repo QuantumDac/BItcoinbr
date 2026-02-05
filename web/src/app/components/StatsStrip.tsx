@@ -11,6 +11,10 @@ type Stats = {
   activeStakers: string;
   tierFloor: string;
   tierFloor2: string;
+  apyBps?: string | null;
+  nextYearTime?: string | null;
+  tokenHolders?: string | null;
+  totalTx?: string | null;
   signal: string;
 };
 
@@ -98,6 +102,28 @@ export default function StatsStrip() {
       <div className="stat-card">
         <span>Signal Status</span>
         <strong>{stats ? stats.signal : "Loading..."}</strong>
+      </div>
+      <div className="stat-card">
+        <span>Current APY</span>
+        <strong>
+          {stats?.apyBps ? `${Number(stats.apyBps) / 100}%` : "Loading..."}
+        </strong>
+      </div>
+      <div className="stat-card">
+        <span>Next Rate Change</span>
+        <strong>
+          {stats?.nextYearTime
+            ? new Date(Number(stats.nextYearTime) * 1000).toLocaleDateString()
+            : "Loading..."}
+        </strong>
+      </div>
+      <div className="stat-card">
+        <span>Token Holders</span>
+        <strong>{stats?.tokenHolders ?? "Indexing..."}</strong>
+      </div>
+      <div className="stat-card">
+        <span>Total Transactions</span>
+        <strong>{stats?.totalTx ?? "Indexing..."}</strong>
       </div>
     </div>
   );

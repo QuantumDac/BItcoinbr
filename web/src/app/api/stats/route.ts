@@ -54,6 +54,10 @@ export async function GET(request: Request) {
   let tier1 = "N/A";
   let tier2 = "N/A";
   let activeStakers = "N/A";
+  let apyBps: string | null = null;
+  let nextYearTime: string | null = null;
+  let tokenHolders: string | null = null;
+  let totalTx: string | null = null;
 
   for (const rpc of RPCS) {
     try {
@@ -107,8 +111,11 @@ export async function GET(request: Request) {
       activeStakers = String(stakers.size);
 
       tvl = formatUnits(tvlRaw as bigint, 18);
-      tier1 = formatUnits((params as readonly unknown[])[1] as bigint, 18);
-      tier2 = formatUnits((params as readonly unknown[])[2] as bigint, 18);
+      const p = params as readonly unknown[];
+      apyBps = String(p[0] as number | bigint);
+      tier1 = formatUnits(p[1] as bigint, 18);
+      tier2 = formatUnits(p[2] as bigint, 18);
+      nextYearTime = String(p[3] as bigint);
       break;
     } catch {
       // try next rpc
@@ -124,6 +131,10 @@ export async function GET(request: Request) {
     activeStakers,
     tierFloor: tier1,
     tierFloor2: tier2,
+    apyBps,
+    nextYearTime,
+    tokenHolders,
+    totalTx,
     signal: trend?.label || "Neutral",
     rpcUsed: tvl === "N/A" ? "none" : "ok",
   });
