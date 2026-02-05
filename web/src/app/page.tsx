@@ -1,4 +1,5 @@
 import ConnectStatusButton from "./components/ConnectStatusButton";
+import StatsStrip from "./components/StatsStrip";
 
 export default function Home() {
   const apySchedule = [
@@ -86,24 +87,7 @@ export default function Home() {
               <div className="tag">Token: 0x0Cf5...F262</div>
               <div className="tag">Staking: 0x9D17...7288</div>
             </div>
-            <div className="stats">
-              <div className="stat-card">
-                <span>Staking TVL</span>
-                <strong>Loading...</strong>
-              </div>
-              <div className="stat-card">
-                <span>Active Stakers</span>
-                <strong>Loading...</strong>
-              </div>
-              <div className="stat-card">
-                <span>Current Tier Floor</span>
-                <strong>1T BTCBR</strong>
-              </div>
-              <div className="stat-card">
-                <span>Signal Status</span>
-                <strong>Standby</strong>
-              </div>
-            </div>
+            <StatsStrip />
             <div className="ticker-strip">
               <div className="ticker-move">
                 {[
