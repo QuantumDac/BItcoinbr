@@ -59,13 +59,20 @@ export default function StatsStrip() {
           fetch("/api/trend"),
         ]);
         const trend = trendRes.ok ? await trendRes.json() : { label: "Neutral" };
-        const tier1 = formatUnits((params as readonly unknown[])[1] as bigint, 18);
-        const tier2 = formatUnits((params as readonly unknown[])[2] as bigint, 18);
+        const p = params as readonly unknown[];
+        const tier1 = formatUnits(p[1] as bigint, 18);
+        const tier2 = formatUnits(p[2] as bigint, 18);
+        const apyBps = p[0] as number | bigint;
+        const nextYearTime = p[3] as bigint;
         setStats({
           tvl: formatUnits(tvlRaw as bigint, 18),
           activeStakers: "1",
           tierFloor: tier1,
           tierFloor2: tier2,
+          apyBps: String(apyBps),
+          nextYearTime: String(nextYearTime),
+          tokenHolders: "Indexing...",
+          totalTx: "Indexing...",
           signal: trend.label || "Neutral",
         });
         return;
