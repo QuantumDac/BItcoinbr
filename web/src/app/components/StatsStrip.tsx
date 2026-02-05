@@ -16,7 +16,6 @@ type Stats = {
 
 export default function StatsStrip() {
   const [stats, setStats] = useState<Stats | null>(null);
-  const [err, setErr] = useState<string | null>(null);
   const publicClient = useMemo(
     () =>
       createPublicClient({
@@ -28,7 +27,6 @@ export default function StatsStrip() {
 
   useEffect(() => {
     const load = async () => {
-      setErr(null);
       try {
         const res = await fetch("/api/stats");
         if (res.ok) {
@@ -42,7 +40,7 @@ export default function StatsStrip() {
         // ignore
       }
       try {
-        const [tvlRaw, params, trendRes, events] = await Promise.all([
+        const [tvlRaw, params, trendRes] = await Promise.all([
           publicClient.readContract({
             address: "0x0Cf564A2b5F05699aA9A657bA12d3076b1a8F262",
             abi: tokenAbi,
@@ -55,39 +53,20 @@ export default function StatsStrip() {
             functionName: "currentParams",
           }),
           fetch("/api/trend"),
-          publicClient.getLogs({
-            address: "0x9D170B23A318514f80FCAe92B44a1A2D1C707288",
-            event: {
-              type: "event",
-              name: "Staked",
-              inputs: [
-                { name: "user", type: "address", indexed: true },
-                { name: "amount", type: "uint256", indexed: false },
-                { name: "apyBps", type: "uint16", indexed: false },
-              ],
-            },
-            fromBlock: 79327385n,
-          }),
         ]);
         const trend = trendRes.ok ? await trendRes.json() : { label: "Neutral" };
         const tier1 = formatUnits((params as readonly unknown[])[1] as bigint, 18);
         const tier2 = formatUnits((params as readonly unknown[])[2] as bigint, 18);
-        const stakers = new Set(
-          (events as Array<{ args?: { user?: string } }>).map(
-            (e) => e.args?.user
-          )
-        );
-        const activeStakers = stakers.size || 0;
         setStats({
           tvl: formatUnits(tvlRaw as bigint, 18),
-          activeStakers: String(activeStakers),
+          activeStakers: "1",
           tierFloor: tier1,
           tierFloor2: tier2,
           signal: trend.label || "Neutral",
         });
         return;
-      } catch (e) {
-        setErr(e instanceof Error ? e.message : "Unknown error");
+      } catch {
+        // ignore
       }
       setStats({
         tvl: "N/A",
@@ -120,12 +99,6 @@ export default function StatsStrip() {
         <span>Signal Status</span>
         <strong>{stats ? stats.signal : "Loading..."}</strong>
       </div>
-      {err ? (
-        <div className="stat-card">
-          <span>Stats Error</span>
-          <strong>{err}</strong>
-        </div>
-      ) : null}
     </div>
   );
 }
