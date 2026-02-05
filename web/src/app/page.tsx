@@ -69,10 +69,6 @@ export default function Home() {
         </nav>
 
         <section className="hero">
-          <div className="hero-bg" aria-hidden="true">
-            <img className="hero-bull" src="/bullish.svg" alt="" />
-            <img className="hero-bear" src="/bearish.svg" alt="" />
-          </div>
           <div>
             <div className="badge">Bitcoin Bear & Bull Run</div>
             <div className="hero-subtitle">Cycle intelligence for bold traders</div>
@@ -167,6 +163,61 @@ export default function Home() {
               </div>
             </div>
             <StatsRight />
+          </div>
+        </section>
+
+        <section className="section sentiment-section">
+          <div className="section-head">
+            <div>
+              <h2 className="section-title">Bullish vs Bearish Sentiment</h2>
+              <p className="section-sub">
+                Real-time market tone distilled into clear momentum profiles so
+                stakers can react faster.
+              </p>
+            </div>
+            <div className="sentiment-pill">Live Cycle Pulse</div>
+          </div>
+          <div className="sentiment-grid">
+            <div className="card sentiment-card bullish">
+              <div className="sentiment-visual">
+                <img src="/bullish.svg" alt="Bullish sentiment" />
+              </div>
+              <div className="sentiment-meta">
+                <h3>Bullish Surge</h3>
+                <p>
+                  Momentum is accelerating with higher highs, strong bid support,
+                  and expanding volume.
+                </p>
+                <div className="sentiment-row">
+                  <span>Momentum</span>
+                  <strong>Rising</strong>
+                </div>
+                <div className="sentiment-row">
+                  <span>Risk Bias</span>
+                  <strong>On</strong>
+                </div>
+              </div>
+            </div>
+            <div className="card sentiment-card bearish">
+              <div className="sentiment-visual">
+                <img src="/bearish.svg" alt="Bearish sentiment" />
+              </div>
+              <div className="sentiment-meta">
+                <h3>Bearish Pressure</h3>
+                <p>
+                  Sellers remain active with heavier distribution and weaker
+                  recovery attempts.
+                </p>
+                <div className="sentiment-row">
+                  <span>Momentum</span>
+                  <strong>Cooling</strong>
+                </div>
+                <div className="sentiment-row">
+                  <span>Risk Bias</span>
+                  <strong>Off</strong>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
