@@ -92,10 +92,13 @@ export default function DashboardClient() {
   const stakedAmount = useMemo(() => {
     const info = stakeInfo ?? manualStake;
     if (!info) return "0";
-    const asAny = info as { amount?: bigint } | readonly unknown[];
-    const amount =
-      Array.isArray(asAny) ? (asAny[0] as bigint) : (asAny.amount ?? 0n);
-    return formatUnits(amount, 18);
+    if (Array.isArray(info)) {
+      return formatUnits((info[0] as bigint) ?? 0n, 18);
+    }
+    if (typeof info === "object" && info && "amount" in info) {
+      return formatUnits(((info as { amount?: bigint }).amount ?? 0n) as bigint, 18);
+    }
+    return "0";
   }, [stakeInfo, manualStake]);
 
   const pendingRewards = useMemo(() => {
