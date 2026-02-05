@@ -7,12 +7,15 @@ export const runtime = "nodejs";
 export const revalidate = 300;
 
 const STAKING_ADDRESS =
+  process.env.STAKING_ADDRESS ||
   process.env.NEXT_PUBLIC_STAKING_ADDRESS ||
   "0x9D170B23A318514f80FCAe92B44a1A2D1C707288";
 const TOKEN_ADDRESS =
+  process.env.TOKEN_ADDRESS ||
   process.env.NEXT_PUBLIC_TOKEN_ADDRESS ||
   "0x0Cf564A2b5F05699aA657bA12d3076b1a8F262";
 const RPCS = [
+  process.env.BSC_RPC_URL,
   process.env.NEXT_PUBLIC_BSC_RPC_URL,
   "https://bsc-dataseed.binance.org/",
   "https://bsc-dataseed1.binance.org/",
@@ -63,5 +66,6 @@ export async function GET(request: Request) {
     tierFloor: tier1,
     tierFloor2: tier2,
     signal: trend?.label || "Neutral",
+    rpcUsed: tvl === "N/A" ? "none" : "ok",
   });
 }
