@@ -18,6 +18,14 @@ type Stats = {
   signal: string;
 };
 
+function formatTrillions(value?: string) {
+  if (!value || value === "N/A") return "N/A";
+  const num = Number(value);
+  if (!Number.isFinite(num)) return value;
+  const trillions = num / 1e12;
+  return `${trillions.toFixed(2)}T`;
+}
+
 export default function StatsStrip() {
   const [stats, setStats] = useState<Stats | null>(null);
   const publicClient = useMemo(
@@ -96,7 +104,9 @@ export default function StatsStrip() {
     <div className="stats">
       <div className="stat-card">
         <span>Staking TVL</span>
-        <strong>{stats ? `${stats.tvl} BTCBR` : "Loading..."}</strong>
+        <strong>
+          {stats ? `${formatTrillions(stats.tvl)} BTCBR` : "Loading..."}
+        </strong>
       </div>
       <div className="stat-card">
         <span>Active Stakers</span>
@@ -104,7 +114,9 @@ export default function StatsStrip() {
       </div>
       <div className="stat-card">
         <span>Current Tier Floor</span>
-        <strong>{stats ? `${stats.tierFloor} BTCBR` : "Loading..."}</strong>
+        <strong>
+          {stats ? `${formatTrillions(stats.tierFloor)} BTCBR` : "Loading..."}
+        </strong>
       </div>
       <div className="stat-card">
         <span>Signal Status</span>
@@ -129,7 +141,7 @@ export default function StatsStrip() {
         <strong>{stats?.tokenHolders ?? "Indexing..."}</strong>
       </div>
       <div className="stat-card">
-        <span>Total Transactions</span>
+        <span>Token Transfers</span>
         <strong>{stats?.totalTx ?? "Indexing..."}</strong>
       </div>
     </div>
