@@ -13,13 +13,15 @@ const TOKEN_ADDRESS =
   process.env.NEXT_PUBLIC_TOKEN_ADDRESS ||
   "0x0Cf564A2b5F05699aA657bA12d3076b1a8F262";
 
-export async function GET() {
+export async function GET(request: Request) {
   const client = createPublicClient({
     chain: bsc,
     transport: http(
       process.env.NEXT_PUBLIC_BSC_RPC_URL || "https://bsc-dataseed.binance.org/"
     ),
   });
+
+  const trendUrl = new URL("/api/trend", request.url).toString();
 
   const [tvlRaw, params, trend] = await Promise.all([
     client.readContract({
@@ -33,9 +35,7 @@ export async function GET() {
       abi: stakingAbi,
       functionName: "currentParams",
     }),
-    fetch(`${process.env.NEXT_PUBLIC_SITE_URL || ""}/api/trend`).then((r) =>
-      r.ok ? r.json() : { label: "Neutral" }
-    ),
+    fetch(trendUrl).then((r) => (r.ok ? r.json() : { label: "Neutral" })),
   ]);
 
   const tvl = formatUnits(tvlRaw as bigint, 18);
