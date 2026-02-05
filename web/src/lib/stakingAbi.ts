@@ -1,0 +1,61 @@
+export const stakingAbi = [
+  {
+    type: "function",
+    name: "stakes",
+    stateMutability: "view",
+    inputs: [{ name: "", type: "address" }],
+    outputs: [
+      { name: "amount", type: "uint256" },
+      { name: "startTime", type: "uint256" },
+      { name: "lastClaimTime", type: "uint256" },
+      { name: "apyBps", type: "uint16" },
+    ],
+  },
+  {
+    type: "function",
+    name: "getTier",
+    stateMutability: "view",
+    inputs: [{ name: "user", type: "address" }],
+    outputs: [{ name: "", type: "uint8" }],
+  },
+  {
+    type: "function",
+    name: "pendingReward",
+    stateMutability: "view",
+    inputs: [{ name: "user", type: "address" }],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "currentParams",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [
+      { name: "apyBps", type: "uint16" },
+      { name: "tier1", type: "uint256" },
+      { name: "tier2", type: "uint256" },
+      { name: "nextYearTime", type: "uint256" },
+    ],
+  },
+  {
+    type: "function",
+    name: "stake",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "amount", type: "uint256" }],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "claim",
+    stateMutability: "nonpayable",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "unstake",
+    stateMutability: "nonpayable",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+] as const;
