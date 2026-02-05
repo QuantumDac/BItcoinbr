@@ -16,6 +16,7 @@ type Stats = {
 
 export default function StatsStrip() {
   const [stats, setStats] = useState<Stats | null>(null);
+  const [err, setErr] = useState<string | null>(null);
   const publicClient = useMemo(
     () =>
       createPublicClient({
@@ -27,6 +28,7 @@ export default function StatsStrip() {
 
   useEffect(() => {
     const load = async () => {
+      setErr(null);
       try {
         const res = await fetch("/api/stats");
         if (res.ok) {
@@ -84,8 +86,8 @@ export default function StatsStrip() {
           signal: trend.label || "Neutral",
         });
         return;
-      } catch {
-        // ignore
+      } catch (e) {
+        setErr(e instanceof Error ? e.message : "Unknown error");
       }
       setStats({
         tvl: "N/A",
@@ -118,6 +120,12 @@ export default function StatsStrip() {
         <span>Signal Status</span>
         <strong>{stats ? stats.signal : "Loading..."}</strong>
       </div>
+      {err ? (
+        <div className="stat-card">
+          <span>Stats Error</span>
+          <strong>{err}</strong>
+        </div>
+      ) : null}
     </div>
   );
 }
