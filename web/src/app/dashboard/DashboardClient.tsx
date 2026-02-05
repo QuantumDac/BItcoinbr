@@ -93,10 +93,13 @@ export default function DashboardClient() {
     const info = stakeInfo ?? manualStake;
     if (!info) return "0";
     if (Array.isArray(info)) {
-      return formatUnits((info[0] as bigint) ?? 0n, 18);
+      return formatUnits((info[0] as bigint) ?? BigInt(0), 18);
     }
     if (typeof info === "object" && info && "amount" in info) {
-      return formatUnits(((info as { amount?: bigint }).amount ?? 0n) as bigint, 18);
+      return formatUnits(
+        ((info as { amount?: bigint }).amount ?? BigInt(0)) as bigint,
+        18
+      );
     }
     return "0";
   }, [stakeInfo, manualStake]);
